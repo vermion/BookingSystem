@@ -4,14 +4,16 @@ using BookingSystem;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookingSystem.Migrations
 {
     [DbContext(typeof(BookingSystemDbContext))]
-    partial class BookingSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180813202423_ApplicationUser")]
+    partial class ApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,10 +70,6 @@ namespace BookingSystem.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new { Id = "9373f515-65e6-458e-a547-8fc83011696a", AccessFailedCount = 0, ConcurrencyStamp = "c9da67b8-b9a8-41c0-9fe1-18bf3da4395b", Email = "terje.engelbertsen@gmail.com", EmailConfirmed = true, LockoutEnabled = false, PhoneNumberConfirmed = false, TwoFactorEnabled = false, UserName = "TerjeEngelbertsen" }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
