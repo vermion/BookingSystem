@@ -4,14 +4,16 @@ using BookingSystem;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookingSystem.Migrations
 {
     [DbContext(typeof(BookingSystemDbContext))]
-    partial class BookingSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180814103628_AddHashedPassword")]
+    partial class AddHashedPassword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,7 +74,7 @@ namespace BookingSystem.Migrations
                     b.ToTable("AspNetUsers");
 
                     b.HasData(
-                        new { Id = "f00b7d31-0b31-4400-891d-2865a54daf02", AccessFailedCount = 0, ConcurrencyStamp = "2841fa4e-f123-4c03-beb2-50b071ce522b", Email = "terje.engelbertsen@gmail.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "terje.engelbertsen@gmail.com", NormalizedUserName = "TerjeEngelbertsen", PasswordHash = "AQAAAAEAACcQAAAAEJZcpHk/OLWKc1Y9CotyseddLy/7jgZ7rIcLjiySTm7CztinQBLbRNGm+GVIlXT91w==", PhoneNumberConfirmed = false, TwoFactorEnabled = false, UserName = "TerjeEngelbertsen" }
+                        new { Id = "665c5fbf-9464-4fcd-bf74-7a10a986ea34", AccessFailedCount = 0, ConcurrencyStamp = "53e7ec00-df2c-47ac-9f88-088a99ab8690", Email = "terje.engelbertsen@gmail.com", EmailConfirmed = true, LockoutEnabled = false, PasswordHash = "AQAAAAEAACcQAAAAEJYtM48Uvd82kpzYYow+idr1RE1DM8YbcVDD0NumuJj0M5DF8wBdHG5kwGnnuziLsA==", PhoneNumberConfirmed = false, TwoFactorEnabled = false, UserName = "TerjeEngelbertsen" }
                     );
                 });
 
@@ -206,7 +208,7 @@ namespace BookingSystem.Migrations
                     b.HasDiscriminator().HasValue("Role");
 
                     b.HasData(
-                        new { Id = "0e2a2d7b-122f-44be-96b8-e8b4ed7269fe", ConcurrencyStamp = "49e5a3d9-5a2f-4576-a667-0538444d8b0d", Name = "Administrator" }
+                        new { Id = "d29e3e16-9cbc-44da-8144-73eae931e7e4", ConcurrencyStamp = "ad36fc0f-ed9c-4b8a-930e-ce50ab0904de", Name = "Administrator" }
                     );
                 });
 
@@ -220,7 +222,7 @@ namespace BookingSystem.Migrations
                     b.HasDiscriminator().HasValue("UserRole");
 
                     b.HasData(
-                        new { UserId = "f00b7d31-0b31-4400-891d-2865a54daf02", RoleId = "0e2a2d7b-122f-44be-96b8-e8b4ed7269fe" }
+                        new { UserId = "665c5fbf-9464-4fcd-bf74-7a10a986ea34", RoleId = "d29e3e16-9cbc-44da-8144-73eae931e7e4" }
                     );
                 });
 

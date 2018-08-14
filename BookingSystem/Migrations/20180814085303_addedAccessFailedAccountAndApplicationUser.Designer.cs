@@ -4,14 +4,16 @@ using BookingSystem;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookingSystem.Migrations
 {
     [DbContext(typeof(BookingSystemDbContext))]
-    partial class BookingSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180814085303_addedAccessFailedAccountAndApplicationUser")]
+    partial class addedAccessFailedAccountAndApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,8 +27,6 @@ namespace BookingSystem.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("Address");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -72,7 +72,7 @@ namespace BookingSystem.Migrations
                     b.ToTable("AspNetUsers");
 
                     b.HasData(
-                        new { Id = "f00b7d31-0b31-4400-891d-2865a54daf02", AccessFailedCount = 0, ConcurrencyStamp = "2841fa4e-f123-4c03-beb2-50b071ce522b", Email = "terje.engelbertsen@gmail.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "terje.engelbertsen@gmail.com", NormalizedUserName = "TerjeEngelbertsen", PasswordHash = "AQAAAAEAACcQAAAAEJZcpHk/OLWKc1Y9CotyseddLy/7jgZ7rIcLjiySTm7CztinQBLbRNGm+GVIlXT91w==", PhoneNumberConfirmed = false, TwoFactorEnabled = false, UserName = "TerjeEngelbertsen" }
+                        new { Id = "7384659c-7d1a-41d6-a91b-85044fcc6589", AccessFailedCount = 0, ConcurrencyStamp = "a9c0e0ee-1ab3-48da-a185-0d22dc125e6c", Email = "terje.engelbertsen@gmail.com", EmailConfirmed = true, LockoutEnabled = false, PhoneNumberConfirmed = false, TwoFactorEnabled = false, UserName = "TerjeEngelbertsen" }
                     );
                 });
 
@@ -83,9 +83,6 @@ namespace BookingSystem.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
 
                     b.Property<string>("Name")
                         .HasMaxLength(256);
@@ -101,8 +98,6 @@ namespace BookingSystem.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -169,16 +164,11 @@ namespace BookingSystem.Migrations
 
                     b.Property<string>("RoleId");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -194,34 +184,6 @@ namespace BookingSystem.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("BookingSystem.Models.Entities.Role", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
-
-
-                    b.ToTable("Role");
-
-                    b.HasDiscriminator().HasValue("Role");
-
-                    b.HasData(
-                        new { Id = "0e2a2d7b-122f-44be-96b8-e8b4ed7269fe", ConcurrencyStamp = "49e5a3d9-5a2f-4576-a667-0538444d8b0d", Name = "Administrator" }
-                    );
-                });
-
-            modelBuilder.Entity("BookingSystem.Models.Entities.UserRole", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<string>");
-
-
-                    b.ToTable("UserRole");
-
-                    b.HasDiscriminator().HasValue("UserRole");
-
-                    b.HasData(
-                        new { UserId = "f00b7d31-0b31-4400-891d-2865a54daf02", RoleId = "0e2a2d7b-122f-44be-96b8-e8b4ed7269fe" }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

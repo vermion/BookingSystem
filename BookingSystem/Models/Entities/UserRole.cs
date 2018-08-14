@@ -2,8 +2,8 @@
 
 namespace BookingSystem.Models.Entities
 {
-    public class ApplicationUser : IdentityUser
+    public class UserRole : IdentityUserRole<string>
     {
-        public string Address { get; set; }
+
     }
 }
