@@ -59,7 +59,6 @@ namespace BookingSystem
                 Id = roldeId,
                 Name = "Administrator"
             });
-
             modelBuilder.Entity<UserRole>().HasData
             (new UserRole
             {

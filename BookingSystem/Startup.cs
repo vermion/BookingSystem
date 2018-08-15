@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using ApplicationUser = BookingSystem.Models.Entities.ApplicationUser;
 
 namespace BookingSystem
@@ -46,6 +48,28 @@ namespace BookingSystem
             services.AddIdentity<ApplicationUser, Role>()
                 .AddEntityFrameworkStores<BookingSystemDbContext>()
                 .AddDefaultTokenProviders();
+
+            var secretKey = Configuration["Jwt:SecretKey"];
+            var issuer = Configuration["Jwt:JwtIssuer"];
+            var audience = Configuration["Jwt:JwtAudience"];
+
+            services.AddAuthentication().AddJwtBearer
+            (options => options.TokenValidationParameters = 
+                new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                });
+
+            services.AddAuthorization(cfg =>
+            {
+                cfg.AddPolicy("Administrator", p => p.RequireRole("Administrator", "True"));
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
