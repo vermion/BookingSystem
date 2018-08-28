@@ -69,6 +69,7 @@ namespace BookingSystem
             services.AddAuthorization(cfg =>
             {
                 cfg.AddPolicy("Administrator", p => p.RequireRole("Administrator", "True"));
+                cfg.AddPolicy("Super User", p => p.RequireRole("Super User", "True"));
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

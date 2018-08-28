@@ -72,7 +72,41 @@ namespace BookingSystem.Migrations
                     b.ToTable("AspNetUsers");
 
                     b.HasData(
-                        new { Id = "f00b7d31-0b31-4400-891d-2865a54daf02", AccessFailedCount = 0, ConcurrencyStamp = "2841fa4e-f123-4c03-beb2-50b071ce522b", Email = "terje.engelbertsen@gmail.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "terje.engelbertsen@gmail.com", NormalizedUserName = "TerjeEngelbertsen", PasswordHash = "AQAAAAEAACcQAAAAEJZcpHk/OLWKc1Y9CotyseddLy/7jgZ7rIcLjiySTm7CztinQBLbRNGm+GVIlXT91w==", PhoneNumberConfirmed = false, TwoFactorEnabled = false, UserName = "TerjeEngelbertsen" }
+                        new { Id = "96893b80-c879-40b0-b12a-4911d20314ec", AccessFailedCount = 0, ConcurrencyStamp = "72cd63f4-2e5e-4ccc-9807-bc2ea0b2f982", Email = "terje.engelbertsen@gmail.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "terje.engelbertsen@gmail.com", NormalizedUserName = "TerjeEngelbertsen", PasswordHash = "AQAAAAEAACcQAAAAEMmnnsBkqQ1E7jc4dzfKQC1aGdyFHNufZLCn0Hj/tjBtBMclrr2lHT4TSw1bWuEfqg==", PhoneNumberConfirmed = false, TwoFactorEnabled = false, UserName = "TerjeEngelbertsen" }
+                    );
+                });
+
+            modelBuilder.Entity("BookingSystem.Models.Entities.Company", b =>
+                {
+                    b.Property<int>("CompanyId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("CompanyId");
+
+                    b.ToTable("Company");
+                });
+
+            modelBuilder.Entity("BookingSystem.Models.Entities.SuperUser", b =>
+                {
+                    b.Property<int>("SuperUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CompanyId");
+
+                    b.Property<string>("IdentityId");
+
+                    b.HasKey("SuperUserId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("SuperUser");
+
+                    b.HasData(
+                        new { SuperUserId = 1, IdentityId = "96893b80-c879-40b0-b12a-4911d20314ec" }
                     );
                 });
 
@@ -206,7 +240,10 @@ namespace BookingSystem.Migrations
                     b.HasDiscriminator().HasValue("Role");
 
                     b.HasData(
-                        new { Id = "0e2a2d7b-122f-44be-96b8-e8b4ed7269fe", ConcurrencyStamp = "49e5a3d9-5a2f-4576-a667-0538444d8b0d", Name = "Administrator" }
+                        new { Id = "f42bb486-1cf6-4606-8d2c-807a13177828", ConcurrencyStamp = "68fc92d0-a9e3-4511-95ba-49545e1b1bf5", Name = "Super User" },
+                        new { Id = "794831af-4b97-44d3-81fa-6d15070f4c2e", ConcurrencyStamp = "ea2911f3-ff00-48b9-9564-2558758814d3", Name = "Administrator" },
+                        new { Id = "d46f52d4-3032-4481-ae43-7ee9275d77ff", ConcurrencyStamp = "c67d2d03-9c00-4c8e-91b7-903a701bf6bf", Name = "Employee" },
+                        new { Id = "a9d2de90-c3e3-4750-8997-d27b3edecac0", ConcurrencyStamp = "95aa7776-e34f-4d6e-9777-00e59eaed15b", Name = "User" }
                     );
                 });
 
@@ -220,8 +257,15 @@ namespace BookingSystem.Migrations
                     b.HasDiscriminator().HasValue("UserRole");
 
                     b.HasData(
-                        new { UserId = "f00b7d31-0b31-4400-891d-2865a54daf02", RoleId = "0e2a2d7b-122f-44be-96b8-e8b4ed7269fe" }
+                        new { UserId = "96893b80-c879-40b0-b12a-4911d20314ec", RoleId = "f42bb486-1cf6-4606-8d2c-807a13177828" }
                     );
+                });
+
+            modelBuilder.Entity("BookingSystem.Models.Entities.SuperUser", b =>
+                {
+                    b.HasOne("BookingSystem.Models.Entities.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

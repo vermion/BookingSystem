@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookingSystem.Migrations
 {
-    public partial class CreateBookingSystem : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,8 @@ namespace BookingSystem.Migrations
                     Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,11 +41,25 @@ namespace BookingSystem.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Address = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Company",
+                columns: table => new
+                {
+                    CompanyId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Company", x => x.CompanyId);
                 });
 
             migrationBuilder.CreateTable(
@@ -114,7 +129,8 @@ namespace BookingSystem.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    RoleId = table.Column<string>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -152,6 +168,52 @@ namespace BookingSystem.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "SuperUser",
+                columns: table => new
+                {
+                    SuperUserId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    IdentityId = table.Column<string>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SuperUser", x => x.SuperUserId);
+                    table.ForeignKey(
+                        name: "FK_SuperUser_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Company",
+                        principalColumn: "CompanyId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Discriminator", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "f42bb486-1cf6-4606-8d2c-807a13177828", "68fc92d0-a9e3-4511-95ba-49545e1b1bf5", "Role", "Super User", null },
+                    { "794831af-4b97-44d3-81fa-6d15070f4c2e", "ea2911f3-ff00-48b9-9564-2558758814d3", "Role", "Administrator", null },
+                    { "d46f52d4-3032-4481-ae43-7ee9275d77ff", "c67d2d03-9c00-4c8e-91b7-903a701bf6bf", "Role", "Employee", null },
+                    { "a9d2de90-c3e3-4750-8997-d27b3edecac0", "95aa7776-e34f-4d6e-9777-00e59eaed15b", "Role", "User", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "96893b80-c879-40b0-b12a-4911d20314ec", 0, null, "72cd63f4-2e5e-4ccc-9807-bc2ea0b2f982", "terje.engelbertsen@gmail.com", true, false, null, "terje.engelbertsen@gmail.com", "TerjeEngelbertsen", "AQAAAAEAACcQAAAAEMmnnsBkqQ1E7jc4dzfKQC1aGdyFHNufZLCn0Hj/tjBtBMclrr2lHT4TSw1bWuEfqg==", null, false, null, false, "TerjeEngelbertsen" });
+
+            migrationBuilder.InsertData(
+                table: "SuperUser",
+                columns: new[] { "SuperUserId", "CompanyId", "IdentityId" },
+                values: new object[] { 1, null, "96893b80-c879-40b0-b12a-4911d20314ec" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "UserId", "RoleId", "Discriminator" },
+                values: new object[] { "96893b80-c879-40b0-b12a-4911d20314ec", "f42bb486-1cf6-4606-8d2c-807a13177828", "UserRole" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -191,6 +253,11 @@ namespace BookingSystem.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SuperUser_CompanyId",
+                table: "SuperUser",
+                column: "CompanyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,10 +278,16 @@ namespace BookingSystem.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "SuperUser");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Company");
         }
     }
 }
